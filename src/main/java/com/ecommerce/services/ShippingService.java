@@ -23,19 +23,21 @@ public class ShippingService {
 
         for(Map.Entry<IProduct, Integer> entry : cartItems.entrySet()){
             IProduct item = entry.getKey();
-            if(!(item instanceof ShippingItem)){
+            IProduct checkShippingItem = (IProduct) item.getShippingItem();
+            ShippingItem shippingItem;
+            if(checkShippingItem == null){
                 continue;
             }
-
-            ShippingItem shippingItem = (ShippingItem) item;
+            shippingItem= (ShippingItem) checkShippingItem;
 
             int quantity = entry.getValue();
             BigDecimal itemWeight = BigDecimal.valueOf(shippingItem.getWeight() * quantity);
             totalWeight = totalWeight.add(itemWeight);
-            System.out.println(quantity + "x " + shippingItem.getName()); //it will print the weight too
+            System.out.printf("%-5d x %-20s %10.2fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);//it will print the weight too
+
         }
 
-        System.out.println("Total package weight: " + totalWeight + " kg");
+        System.out.println("Total package weight: " + totalWeight + " kg\n");
 
         return totalWeight.multiply(BigDecimal.valueOf(COST_PER_KG));
     }

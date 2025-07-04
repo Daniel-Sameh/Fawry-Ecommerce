@@ -2,6 +2,7 @@ package main.java.com.ecommerce.model.carts;
 
 import main.java.com.ecommerce.model.products.IProduct;
 import main.java.com.ecommerce.model.products.Product;
+import main.java.com.ecommerce.model.products.decorators.ExpiringProductDecorator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,9 @@ public class Cart {
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than zero");
+        }
+        if(product instanceof ExpiringProductDecorator && ((ExpiringProductDecorator) product).isExpired()) {
+            throw new IllegalStateException("The Product has expired on "+ ((ExpiringProductDecorator) product).getExpiryDate());
         }
         if (items.containsKey(product)) {
             items.put(product, items.get(product) + amount);

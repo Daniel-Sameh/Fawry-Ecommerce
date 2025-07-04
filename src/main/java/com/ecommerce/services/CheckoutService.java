@@ -24,15 +24,19 @@ public class CheckoutService {
             throw new IllegalStateException("Cart is empty. Cannot proceed to checkout.");
         }
 
-        System.out.println("** Checkout receipt ** ");
         Map<IProduct, Integer> items = customerCart.getItems();
-
+        for(var product: items.keySet()){
+            if(product.isExpired()){
+                throw new IllegalStateException("The "+ product.getName()+ " is expired!");
+            }
+        }
         BigDecimal subtotal = BigDecimal.valueOf(0.0);
 
         //Shipping items and getting the shipping price
         BigDecimal shippingCost = shippingService.shipItems(items, customer.getAddress());
 
 
+        System.out.println("** Checkout receipt ** ");
         for (Map.Entry<IProduct, Integer> entry : items.entrySet()) {
             IProduct product = entry.getKey();
             int orderAmount = entry.getValue();
@@ -47,7 +51,7 @@ public class CheckoutService {
             BigDecimal orderAmountBigDecimal = BigDecimal.valueOf(orderAmount);
             BigDecimal totalItemPrice= productPrice.multiply(orderAmountBigDecimal);
 
-            System.out.println(orderAmount + "x " + product.getName() + "      " + totalItemPrice.doubleValue());
+            System.out.printf("%-5d %-10s %10.2f%n", orderAmount, product.getName(), totalItemPrice.doubleValue());
             subtotal = subtotal.add(totalItemPrice);
         }
         System.out.println("-------------------------------");

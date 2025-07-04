@@ -12,9 +12,15 @@ public class Product implements IProduct{
     }
 
     @Override
+    public String getFullName(){
+        return name;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
+
 
     @Override
     public double getPrice() {
@@ -33,5 +39,13 @@ public class Product implements IProduct{
         }else{
             throw new IllegalArgumentException("Insufficient quantity available");
         }
+    }
+    @Override
+    public boolean isExpired(){
+        return false;
+    }
+    @Override
+    public ShippingItem getShippingItem(){
+        return null;
     }
 }
