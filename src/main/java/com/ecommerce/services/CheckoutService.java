@@ -1,15 +1,10 @@
 package main.java.com.ecommerce.services;
 
 import main.java.com.ecommerce.model.carts.Cart;
-import main.java.com.ecommerce.model.carts.CartItem;
 import main.java.com.ecommerce.model.customers.Customer;
 import main.java.com.ecommerce.model.products.IProduct;
-import main.java.com.ecommerce.model.products.Product;
-import main.java.com.ecommerce.model.products.ShippingItem;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CheckoutService {

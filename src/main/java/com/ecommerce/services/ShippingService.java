@@ -33,8 +33,7 @@ public class ShippingService {
             int quantity = entry.getValue();
             BigDecimal itemWeight = BigDecimal.valueOf(shippingItem.getWeight() * quantity);
             totalWeight = totalWeight.add(itemWeight);
-            System.out.printf("%-5d x %-20s %10.2fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);//it will print the weight too
-
+            System.out.printf("%dx  %-15s %2.0fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);
         }
 
         System.out.println("Total package weight: " + totalWeight + " kg\n");
