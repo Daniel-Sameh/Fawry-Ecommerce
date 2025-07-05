@@ -32,10 +32,8 @@ public class ShippingService {
             BigDecimal itemWeight = BigDecimal.valueOf(shippingItem.getWeight() * quantity);
             totalWeight = totalWeight.add(itemWeight);
 
-//            System.out.printf("%dx  %-15s %2.0fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);
         }
 
-//        System.out.println("Total package weight: " + totalWeight + " kg\n");
         receiptPrinter.printShipmentReceipt(cartItems, totalWeight, address);
         return totalWeight.multiply(COST_PER_KG);
     }

@@ -61,6 +61,7 @@ public class CheckoutService {
                 break;
             }
 
+            tmpCustomerBalance = tmpCustomerBalance.subtract(totalItemPrice);
             totalItemsPrices.put(product, totalItemPrice);
 
             subtotal = subtotal.add(totalItemPrice);

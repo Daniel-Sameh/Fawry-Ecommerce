@@ -9,7 +9,7 @@ The Fawry E-commerce System is a console-based Java application that simulates a
 
 ## 🏗️ Class Diagram
 
-![E-commerce System Class Diagram](docs/fawryEcommerceBackend1.drawio%20(1).svg)
+![E-commerce System Class Diagram](docs/fawryEcommerceBackend2.drawio.svg)
 
 ### Design Patterns Implemented:
 - **Decorator Pattern**: Used for extending product functionality (expiring products, shipping products)
