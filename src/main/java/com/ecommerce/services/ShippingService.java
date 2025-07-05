@@ -1,44 +1,43 @@
 package main.java.com.ecommerce.services;
 
-import main.java.com.ecommerce.model.carts.Cart;
-import main.java.com.ecommerce.model.customers.Customer;
-import main.java.com.ecommerce.model.products.IProduct;
-import main.java.com.ecommerce.model.products.ShippingItem;
+import main.java.com.ecommerce.model.products.IInventoryProduct;
+import main.java.com.ecommerce.model.products.IShippable;
+import main.java.com.ecommerce.utils.RecieptPrinter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ShippingService {
 
-    private final double COST_PER_KG=27.2727;
+    private static final BigDecimal COST_PER_KG = BigDecimal.valueOf(27.2727);
+    private static final RecieptPrinter receiptPrinter = new RecieptPrinter();
     public ShippingService(){}
 
-    public BigDecimal shipItems(Map<IProduct, Integer> cartItems, String address){
-        System.out.println("Shipping items to: " + address);
-        System.out.println("** Shipment Notice **");
+    public BigDecimal shipItems(Map<IInventoryProduct, Integer> cartItems, String address){
+        BigDecimal totalWeight= BigDecimal.ZERO;
 
-        BigDecimal totalWeight= BigDecimal.valueOf(0.0); //in kg
-
-        for(Map.Entry<IProduct, Integer> entry : cartItems.entrySet()){
-            IProduct item = entry.getKey();
-            IProduct checkShippingItem = (IProduct) item.getShippingItem();
-            ShippingItem shippingItem;
-            if(checkShippingItem == null){
-                continue;
+        for(Map.Entry<IInventoryProduct, Integer> entry : cartItems.entrySet()){
+            IInventoryProduct item = entry.getKey();
+            if(!(item instanceof IShippable)){
+                continue; //Skip items that are not shippable
             }
-            shippingItem= (ShippingItem) checkShippingItem;
+
+            IShippable shippingItem= (IShippable) item;
 
             int quantity = entry.getValue();
+            if (quantity <= 0) {
+                throw new IllegalArgumentException("Quantity must be greater than zero");
+            }
+
             BigDecimal itemWeight = BigDecimal.valueOf(shippingItem.getWeight() * quantity);
             totalWeight = totalWeight.add(itemWeight);
-            System.out.printf("%dx  %-15s %2.0fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);
+
+//            System.out.printf("%dx  %-15s %2.0fg%n", quantity, shippingItem.getName(), shippingItem.getWeight() * 1000);
         }
 
-        System.out.println("Total package weight: " + totalWeight + " kg\n");
-
-        return totalWeight.multiply(BigDecimal.valueOf(COST_PER_KG));
+//        System.out.println("Total package weight: " + totalWeight + " kg\n");
+        receiptPrinter.printShipmentReceipt(cartItems, totalWeight, address);
+        return totalWeight.multiply(COST_PER_KG);
     }
 
 }

@@ -1,13 +1,15 @@
 package main.java.com.ecommerce.model.products.decorators;
 
+import main.java.com.ecommerce.model.products.IInventoryProduct;
 import main.java.com.ecommerce.model.products.IProduct;
+import main.java.com.ecommerce.model.products.IShippable;
 import main.java.com.ecommerce.model.products.ShippingItem;
 
 import java.time.LocalDate;
 
-public class ShippingProductDecorator extends ProductDecorator implements ShippingItem {
+public class ShippingProductDecorator extends ProductDecorator implements IShippable{
     private final double weight;
-    public ShippingProductDecorator(IProduct product, double weight) {
+    public ShippingProductDecorator(IInventoryProduct product, double weight) {
         super(product);
         this.weight = weight;
     }
@@ -15,11 +17,6 @@ public class ShippingProductDecorator extends ProductDecorator implements Shippi
     public String getFullName(){
         return product.getFullName() + " " + (weight*1000) + "g";
     }
-    @Override
-    public String getName() {
-        return product.getName();
-    }
-
 
     @Override
     public double getWeight() {
@@ -27,12 +24,7 @@ public class ShippingProductDecorator extends ProductDecorator implements Shippi
     }
 
     @Override
-    public boolean isExpired() {
-        return product.isExpired();
-    }
-
-    @Override
-    public ShippingItem getShippingItem(){
-        return this;
+    public boolean isShippable() {
+        return true;
     }
 }

@@ -1,14 +1,14 @@
 package main.java.com.ecommerce.model.products.decorators;
 
-import main.java.com.ecommerce.model.products.IProduct;
-import main.java.com.ecommerce.model.products.ShippingItem;
+import main.java.com.ecommerce.model.products.*;
 
 import java.time.LocalDate;
 
-public class ExpiringProductDecorator extends ProductDecorator {
+public class ExpiringProductDecorator extends ProductDecorator implements IExpirable {
+
     private LocalDate expiryDate;
 
-    public ExpiringProductDecorator(IProduct product, LocalDate expiryDate) {
+    public ExpiringProductDecorator(IInventoryProduct product, LocalDate expiryDate) {
         super(product);
         this.expiryDate = expiryDate;
     }
@@ -19,16 +19,6 @@ public class ExpiringProductDecorator extends ProductDecorator {
     }
 
     @Override
-    public String getName(){
-        return product.getName();
-    }
-
-    @Override
-    public double getPrice() {
-        if (isExpired()) throw new IllegalStateException("The Product has expired on "+ expiryDate);
-        return super.getPrice();
-    }
-
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
@@ -36,11 +26,6 @@ public class ExpiringProductDecorator extends ProductDecorator {
     @Override
     public boolean isExpired() {
         return LocalDate.now().isAfter(expiryDate);
-    }
-
-    @Override
-    public ShippingItem getShippingItem(){
-        return product.getShippingItem();
     }
 
 }

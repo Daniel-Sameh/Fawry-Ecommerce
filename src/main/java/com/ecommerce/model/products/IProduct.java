@@ -6,8 +6,4 @@ public interface IProduct {
     String getFullName();
     String getName();
     double getPrice();
-    int getQuantity();
-    void reduceQuantity(int amount);
-    boolean isExpired();
-    ShippingItem getShippingItem();
 }

@@ -1,5 +1,6 @@
 package main.java.com.ecommerce.model.carts;
 
+import main.java.com.ecommerce.model.products.IInventoryProduct;
 import main.java.com.ecommerce.model.products.IProduct;
 import main.java.com.ecommerce.model.products.Product;
 import main.java.com.ecommerce.model.products.decorators.ExpiringProductDecorator;
@@ -10,35 +11,30 @@ import java.util.List;
 import java.util.Map;
 
 public class Cart {
-    private Map<IProduct, Integer> items = new HashMap<>();
+    private Map<IInventoryProduct, Integer> items = new HashMap<>();
 
     public Cart() {}
 
-    public Map<IProduct, Integer> getItems() {
+    public Map<IInventoryProduct, Integer> getItems() {
         return items;
     }
 
     public boolean isEmpty(){
         return items.isEmpty();
     }
-    public void addItem(IProduct product, int amount) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
+    public void addItem(IInventoryProduct product, int amount) {
+        if(product instanceof ExpiringProductDecorator && ((ExpiringProductDecorator) product).isExpired()) {
+            throw new IllegalStateException("The Product has expired on "+ ((ExpiringProductDecorator) product).getExpiryDate());
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than zero");
         }
-        if(product instanceof ExpiringProductDecorator && ((ExpiringProductDecorator) product).isExpired()) {
-            throw new IllegalStateException("The Product has expired on "+ ((ExpiringProductDecorator) product).getExpiryDate());
-        }
-        if (items.containsKey(product)) {
-            items.put(product, items.get(product) + amount);
-        } else {
-            items.put(product, amount);
-        }
+
+        items.merge(product, amount, Integer::sum);
+
     }
 
-    public void removeItem(IProduct product, int amount) {
+    public void removeItem(IInventoryProduct product, int amount) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }

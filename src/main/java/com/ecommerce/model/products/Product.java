@@ -1,6 +1,6 @@
 package main.java.com.ecommerce.model.products;
 
-public class Product implements IProduct{
+public class Product implements IInventoryProduct {
     private String name;
     private double price;
     private int quantity;
@@ -34,18 +34,10 @@ public class Product implements IProduct{
 
     @Override
     public void reduceQuantity(int amount) {
-        if (amount <= quantity && amount >= 0) {
+        if (amount <= quantity) {
             quantity -= amount;
         }else{
             throw new IllegalArgumentException("Insufficient quantity available");
         }
-    }
-    @Override
-    public boolean isExpired(){
-        return false;
-    }
-    @Override
-    public ShippingItem getShippingItem(){
-        return null;
     }
 }
